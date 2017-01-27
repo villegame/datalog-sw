@@ -20,6 +20,8 @@ tester.php
 dht.c  
 reader.py  
 
+
+
 db.php
 Database-related PHP functions.
 
@@ -43,3 +45,9 @@ Sensor manager page.
 
 tester.php
 Sensor tester. Reads all temperature sensors and DHT22-sensors from pins 14 and 15.
+
+dht.c
+C-program to read data from DHT -sensors. Based on example here: http://www.uugear.com/portfolio/read-dht1122-temperature-humidity-sensor-from-raspberry-pi/
+
+reader.py
+Python script to read sensor data and update it to database.
