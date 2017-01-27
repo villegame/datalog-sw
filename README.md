@@ -37,7 +37,7 @@ Returns humidity data from database in csv -format.
 gettempdata.php
 Returns temperature data from database in csv -format.
 
-index.php
+index.html
 Frontpage.
 
 sensors.php
