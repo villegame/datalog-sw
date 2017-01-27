@@ -11,7 +11,7 @@ chart.js
 charts.html  
 gethumdata.php  
 gettempdata.php  
-index.php  
+index.html
 sensors.php  
 tester.php
 
