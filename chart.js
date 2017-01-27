@@ -40,8 +40,8 @@ var LineChart = function (type) {
 
 	var dataSource = "";
 
-	if(type == "temperature") dataSource = "../gettempdata.php";
-	else if(type == "humidity") dataSource = "../gethumdata.php";
+	if(type == "temperature") dataSource = "gettempdata.php";
+	else if(type == "humidity") dataSource = "gethumdata.php";
 
 	// Get the data
 	d3.csv(dataSource, function(error, data) {
