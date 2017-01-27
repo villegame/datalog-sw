@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Charts </title>
+<meta charset="utf-8">
+<style> /* set the CSS */
+
+body { font: 12px Arial;}
+
+path {
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+.legend {
+    font-size: 16px;
+    font-weight: bold;
+    text-anchor: middle;
+}
+
+</style>
+
+
+<!-- load the d3.js library -->
+<script src="d3.v3.min.js"></script>
+<script src="chart.js"></script>
+
+</head>
+<body>
+
+<div id="temperature"></div>
+<div id="humidity"></div>
+
+<script type="text/javascript">
+
+LineChart("temperature");
+LineChart("humidity");
+
+</script>
+
+</body>
+</html>
+
+
