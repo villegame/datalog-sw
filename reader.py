@@ -70,11 +70,15 @@ for device in owDevices:
 	command = "timeout 6 cat /sys/devices/w1_bus_master1/{0}/w1_slave".format(device[1])
 	path = "/sys/devices/w1_bus_master1/{0}/w1_slave".format(device[1])
 	if os.path.exists(path):
-		value = float(os.popen(command).read().strip().split("=")[2])/1000
-		if isinstance(value, float):
-			if value != 85.00: 
-				# Do not add 85.00, it is a reset value
-				owCommands.append([device[0],command,value])
+		try:
+			value = float(os.popen(command).read().strip().split("=")[2])/1000
+			if isinstance(value, float):
+				if value != 85.00: 
+					# Do not add 85.00, it is a reset value
+					owCommands.append([device[0],command,value])
+		except:
+			#not a float or not connected
+			pass
 
 # DHT:
 
