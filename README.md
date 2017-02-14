@@ -19,6 +19,7 @@ Datalogger software
 
   * dht.c  
   * reader.py  
+  * poweroff.py
 
 * Other
 
@@ -53,6 +54,9 @@ C-program to read data from DHT -sensors. Based on example here: http://www.uuge
 
 ### reader.py
 Python script to read sensor data and update it to database.
+
+### poweroff.py
+Simple script for lighting up a led to indicate system is online and to listen a button for shutdown command.
 
 ### psql.sql
 Contains sql scripts for creting a schema and a few tables.
