@@ -1,5 +1,6 @@
 # datalog-sw
-Datalogger software
+
+Datalogger software related to a datalogger project [described here] (https://villegame.wordpress.com/projects/data-monitoring/portable-temperature-and-humidity-measuring-application-project/).
 
 * /var/www/
 
