@@ -20,7 +20,9 @@ Datalogger software
   * dht.c  
   * reader.py  
 
+* Other
 
+  * psql.sql
 
 ### db.php
 Database-related PHP functions.
@@ -51,3 +53,6 @@ C-program to read data from DHT -sensors. Based on example here: http://www.uuge
 
 ### reader.py
 Python script to read sensor data and update it to database.
+
+### psql.sql
+Contains sql scripts for creting a schema and a few tables.
