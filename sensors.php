@@ -1,26 +1,43 @@
 <?php
 	require_once('../db.php');
 
+	$info_msg = "";
 
 	if(isset($_POST['btnAddDevice'])) {
 		DbAddDevice($_POST['source'], $_POST['name'], $_POST['sensor'], $_POST['enabled'], $_POST['type']);
+		$info_msg .= "Added device from ".$_POST['source']." with name:".$_POST['name'].".<br />";
 	}
-
 	if(isset($_POST['btnRenameDevice'])) {
 		DbRenameDevice($_POST['id'], $_POST['name']);
+		$info_msg .= "Device ".$_POST['id']." renamed to ".$_POST['name'].".<br />";
 	}
-
 	if(isset($_POST['btnRemoveDevice'])) {
 		DbRemoveDevice($_POST['id']);
+		$info_msg .= "Device ".$_POST['id']." removed.<br />";
 	}
-
 	if(isset($_POST['btnEnableDevice'])) {
 		DbEnableDevice($_POST['id']);
-
+		$info_msg .= "Device ".$_POST['id']." enabled.<br />";
 	}
 	if(isset($_POST['btnDisableDevice'])) {
 		DbDisableDevice($_POST['id']);
+		$info_msg .= "Device ".$_POST['id']." disabled.<br />";
 	}
+	if(isset($_POST['btnSetDeviceScreenOrder'])) {
+		if(isset($_POST['screen']) && isset($_POST['order'])) {
+			if(is_numeric($_POST['screen']) && is_numeric($_POST['order'])) {
+				DbSetDeviceScreenOrder($_POST['id'], $_POST['screen'], $_POST['order']);
+				$info_msg .= "Updated device screen order (id:".$_POST['id'].", screen:".$_POST['screen'].", order:".$_POST['order'].").<br />";
+			}
+			else {
+				$info_msg .= "Screen and order values need to be numeric.<br />";
+			}
+		}
+		else {
+			$info_msg .= "Screen and order values are both needed.<br />";
+		}
+	}
+
 ?>
 
 <html>
@@ -66,6 +83,12 @@ function loadXMLDoc(theURL) {
 
 <?php
 
+// Check errors
+
+if($info_msg != "") {
+	echo "<center><b>".$info_msg."</b></center>";
+}
+
 // 1-Wire temperature devices
 
 $local_temp_devices = array();
@@ -83,7 +106,7 @@ if(count($local_temp_devices) > 0) {
 
 	echo "<b>Following devices were found on system:</b>";
 	echo "<table>";
-	echo "<tr><td><b>Name</b></td><td><b>Status</b></td><td><b>State</b></td><td><b>Action</b></td></tr>";
+	echo "<tr><td><b>Name</b></td><td><b>Status</b></td><td><b>State</b></td><td><b>On LCD display</b></td><td><b>Action</b></td></tr>";
 
 	for($i = 0; $i < count($local_temp_devices); $i++) {
 
@@ -91,21 +114,26 @@ if(count($local_temp_devices) > 0) {
 		$db_device_name = "";
 		$db_device_id;
 		$db_device_enabled;
+		$db_device_screen;
+		$db_device_screen_order;
 		$device_state = "";
 		$device_status = "Not in database";
 
 		for($j = 0; $j < count($db_temp_device_data); $j++) {
 			if($local_temp_devices[$i] == $db_temp_device_data[$j]['devices_source']) {
 				$exists = true;
-				$db_device_id = $db_temp_device_data[$j]['devices_id'];
-				$db_device_enabled = $db_temp_device_data[$j]['devices_enabled'];
-				$db_device_name = $db_temp_device_data[$j]['devices_name'];
+				$db_device_id 		= 	$db_temp_device_data[$j]['devices_id'];
+				$db_device_enabled 	= 	$db_temp_device_data[$j]['devices_enabled'];
+				$db_device_name 	= 	$db_temp_device_data[$j]['devices_name'];
+				$db_device_screen 	=	$db_temp_device_data[$j]['devices_screen'];
+				$db_device_screen_order	=	$db_temp_device_data[$j]['devices_screen_order'];
 				break;
 			}
 		}
 
 
 		$buttons = "";
+		$info_screen = "";
 
 		if($exists) {
 
@@ -126,6 +154,13 @@ if(count($local_temp_devices) > 0) {
 			}
 		        $buttons .= "</form>";
 
+			$info_screen = "<form method='post'>";
+			$info_screen .= "<input type='hidden' name='id' value='".$db_device_id."' />";
+			$info_screen .= "Screen:<input type='text' name='screen' value='".$db_device_screen."' />";
+			$info_screen .= "Line:<input type='text' name='order' value='".$db_device_screen_order."' />";
+			$info_screen .= "<input type='submit' name='btnSetDeviceScreenOrder' value='SET' />";
+			$info_screen .= "</form>";
+
 		}
 		else {
 			$buttons = "<form method='post'>";
@@ -144,6 +179,7 @@ if(count($local_temp_devices) > 0) {
 		echo "<td>";
 		if($exists) echo $device_state;
 		echo "</td>";
+		echo "<td>".$info_screen."</td>";
 		echo "<td>".$buttons."</td>";
 		echo "</tr>";
 	}
@@ -202,7 +238,7 @@ if($db_hum_devices_tmp) $db_hum_device_data = $db_hum_devices_tmp;
 echo "<h1>DHT-22 devices</h1>";
 
 echo "<table>";
-echo "<tr><td><b>Pin</b></td><td><b>Type</b></td><td><b>Status</b></td><td><b>State</b></td><td><b>Action</b></td></tr>";
+echo "<tr><td><b>Pin</b></td><td><b>Type</b></td><td><b>Status</b></td><td><b>State</b></td><td><b>On LCD display</b></td><td><b>Action</b></td></tr>";
 
 for($i=0; $i < count($local_hum_devices); $i++) {
 
@@ -210,18 +246,25 @@ for($i=0; $i < count($local_hum_devices); $i++) {
 	$db_device_name = "";
 	$db_device_id;
 	$db_device_enabled;
+	$db_device_screen;
+	$db_device_Screen_order;
 	$device_state = "";
 
 	for($j=0; $j < count($db_hum_device_data); $j++) {
 		if($db_hum_device_data[$j]['devices_source'] == $local_hum_devices[$i][0]
 		&& $db_hum_device_data[$j]['devices_type'] == $local_hum_devices[$i][1]) {
 			$exists = true;
-			$db_device_name = $db_hum_device_data[$j]['devices_name'];
-			$db_device_id  = $db_hum_device_data[$j]['devices_id'];
-			$db_device_enabled = $db_hum_device_data[$j]['devices_enabled'];
+			$db_device_name 	= $db_hum_device_data[$j]['devices_name'];
+			$db_device_id  		= $db_hum_device_data[$j]['devices_id'];
+			$db_device_enabled 	= $db_hum_device_data[$j]['devices_enabled'];
+			$db_device_screen 	= $db_hum_device_data[$j]['devices_screen'];
+			$db_device_screen_order	= $db_hum_device_data[$j]['devices_screen_order'];
 			break;
 		}
 	}
+
+	$buttons = "";
+	$info_screen = "";
 
 	if($exists) {
 		$buttons = "<form method='post'>";
@@ -238,7 +281,14 @@ for($i=0; $i < count($local_hum_devices); $i++) {
 			$buttons .= "<input type='submit' name='btnEnableDevice' value='ENABLE' />";
 		}
 		$buttons .= "</form>";
-	}		
+
+		$info_screen = "<form method='post'>";
+                $info_screen .= "<input type='hidden' name='id' value='".$db_device_id."' />";
+                $info_screen .= "Screen:<input type='text' name='screen' value='".$db_device_screen."' />";
+                $info_screen .= "Line:<input type='text' name='order' value='".$db_device_screen_order."' />";
+                $info_screen .= "<input type='submit' name='btnSetDeviceScreenOrder' value='SET' />";
+                $info_screen .= "</form>";
+	}
 	else {
 		$buttons = "<form method='post'>";
 		$buttons .= "<input type='hidden' name='source' value='".$local_hum_devices[$i][0]."' />";
@@ -260,12 +310,9 @@ for($i=0; $i < count($local_hum_devices); $i++) {
 	if($exists) echo "Exists in database as '".$db_device_name."'";
 	else echo "Not in database.";
 	echo "</td>";
-	echo "<td>";
-	echo $device_state;
-	echo "</td>";
-	echo "<td>";
-	echo $buttons;
-	echo "</td>";
+	echo "<td>".$device_state."</td>";
+	echo "<td>".$info_screen."</td>";
+	echo "<td>".$buttons."</td>";
 	echo "</tr>";
 }
 
