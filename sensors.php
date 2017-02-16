@@ -43,6 +43,14 @@
 <html>
 <head>
 <title> Device management </title>
+<style>
+tr:nth-child(even) {
+    background-color: #A0A0A0;
+}
+tr:nth-child(odd) {
+    background-color: #C0C0C0;
+}
+</style>
 </head>
 <body>
 <script>
@@ -141,7 +149,7 @@ if(count($local_temp_devices) > 0) {
 			//$buttons = "REMOVE, DISABLE";
 			$buttons = "<form method='post'>";
 		        $buttons .= "<input type='hidden' name='id' value='".$db_device_id."' />";
-			$buttons .= "Rename to: <input type='text' name='name' />";
+			$buttons .= "Rename to: <input type='text' name='name' size='15' />";
 			$buttons .= "<input type='submit' name='btnRenameDevice' value='RENAME' />";
 		        $buttons .= "<input type='submit' name='btnRemoveDevice' value='REMOVE' />";
 			if($db_device_enabled) {
@@ -156,16 +164,16 @@ if(count($local_temp_devices) > 0) {
 
 			$info_screen = "<form method='post'>";
 			$info_screen .= "<input type='hidden' name='id' value='".$db_device_id."' />";
-			$info_screen .= "Screen:<input type='text' name='screen' value='".$db_device_screen."' />";
-			$info_screen .= "Line:<input type='text' name='order' value='".$db_device_screen_order."' />";
-			$info_screen .= "<input type='submit' name='btnSetDeviceScreenOrder' value='SET' />";
+			$info_screen .= "<table><tr><td>Screen:</td><td><input type='text' name='screen' value='".$db_device_screen."' size='1' /><td></td></td></tr>";
+			$info_screen .= "<tr><td>Line:</td><td><input type='text' name='order' value='".$db_device_screen_order."' size='1' /></td>";
+			$info_screen .= "<td><input type='submit' name='btnSetDeviceScreenOrder' value='SET' /></td></tr></table>";
 			$info_screen .= "</form>";
 
 		}
 		else {
 			$buttons = "<form method='post'>";
 			$buttons .= "<input type='hidden' name='source' value='".$local_temp_devices[$i]."' />";
-			$buttons .= "Add as: <input type='text' name='name' />";
+			$buttons .= "Add as: <input type='text' name='name' size='15' />";
 			$buttons .= "<input type='hidden' name='sensor' value='1' />";
 			$buttons .= "<input type='hidden' name='enabled' value='1' />";
 			$buttons .= "<input type='hidden' name='type' value='1' />";
@@ -269,7 +277,7 @@ for($i=0; $i < count($local_hum_devices); $i++) {
 	if($exists) {
 		$buttons = "<form method='post'>";
 		$buttons .= "<input type='hidden' name='id' value='".$db_device_id."' />";
-		$buttons .= "Rename to: <input type='text' name='name' />";
+		$buttons .= "Rename to: <input type='text' name='name' size='15' />";
 		$buttons .= "<input type='submit' name='btnRenameDevice' value='RENAME' />";
 		$buttons .= "<input type='submit' name='btnRemoveDevice' value='REMOVE' />";
 		if($db_device_enabled) {
@@ -282,17 +290,19 @@ for($i=0; $i < count($local_hum_devices); $i++) {
 		}
 		$buttons .= "</form>";
 
+
 		$info_screen = "<form method='post'>";
                 $info_screen .= "<input type='hidden' name='id' value='".$db_device_id."' />";
-                $info_screen .= "Screen:<input type='text' name='screen' value='".$db_device_screen."' />";
-                $info_screen .= "Line:<input type='text' name='order' value='".$db_device_screen_order."' />";
-                $info_screen .= "<input type='submit' name='btnSetDeviceScreenOrder' value='SET' />";
+                $info_screen .= "<table><tr><td>Screen:</td><td><input type='text' name='screen' value='".$db_device_screen."' size='1' /><td></td></td></tr>";
+                $info_screen .= "<tr><td>Line:</td><td><input type='text' name='order' value='".$db_device_screen_order."' size='1' /></td>";
+                $info_screen .= "<td><input type='submit' name='btnSetDeviceScreenOrder' value='SET' /></td></tr></table>";
                 $info_screen .= "</form>";
+
 	}
 	else {
 		$buttons = "<form method='post'>";
 		$buttons .= "<input type='hidden' name='source' value='".$local_hum_devices[$i][0]."' />";
-		$buttons .= "Add as: <input type='text' name='name' />";
+		$buttons .= "Add as: <input type='text' name='name' size='15' />";
 		$buttons .= "<input type='hidden' name='sensor' value='2' />";
 		$buttons .= "<input type='hidden' name='enabled' value='1' />";
 		$buttons .= "<input type='hidden' name='type' value='".$local_hum_devices[$i][1]."' />";
