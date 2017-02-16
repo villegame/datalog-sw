@@ -2,14 +2,14 @@
 
 function DbConnect () {
 
-	$db_conn = pg_connect("host=localhost port=5432 dbname=temp_mon user=temp_mon_user password=password");
+	$db_conn = pg_connect("host=localhost port=5432 dbname=temp_mon user=temp_mon_user password=temp_mon_user");
 	return $db_conn;
 }
 
 function DbGetTempDeviceData() {
 
 	$db_conn = DbConnect();
-	$result = pg_query($db_conn, "select devices_id, devices_type, devices_name, devices_source, devices_sensor, devices_enabled from temp_mon_schema.devices where devices_sensor=1;");
+	$result = pg_query($db_conn, "select devices_id, devices_type, devices_name, devices_source, devices_sensor, devices_enabled, devices_screen, devices_screen_order from temp_mon_schema.devices where devices_sensor=1;");
 	$result_array = pg_fetch_all($result);
 	pg_close($db_conn);
 
@@ -19,13 +19,14 @@ function DbGetTempDeviceData() {
 function DbGetHumDeviceData() {
 
 	$db_conn = DbConnect();
-	$result = pg_query($db_conn, "select devices_id, devices_type, devices_name, devices_source, devices_sensor, devices_enabled from temp_mon_schema.devices where devices_sensor=2;");
+	$result = pg_query($db_conn, "select devices_id, devices_type, devices_name, devices_source, devices_sensor, devices_enabled, devices_screen, devices_screen_order from temp_mon_schema.devices where devices_sensor=2;");
 	$result_array = pg_fetch_all($result);
 	pg_close($db_conn);
 
 	return $result_array;
 }
 
+// source: gpio pin or 1w id, name: user chosen, $sensor: 1 = 1-wire, 2 = dht, enabled 1/0, typeid hum/temp
 function DbAddDevice($source, $name, $sensor, $enabled, $type) {
 
 	$db_conn = DbConnect();
@@ -62,6 +63,13 @@ function DbDisableDevice($id) {
         $result = pg_prepare($db_conn, "update_query", 'update temp_mon_schema.devices set devices_enabled=0 where devices_id=$1;');
         $result = pg_execute($db_conn, "update_query", array($id));
         pg_close($db_conn);
+}
+
+function DbSetDeviceScreenOrder($id, $screen, $order) {
+	$db_conn = DbConnect();
+	$result = pg_prepare($db_conn, "update_query", 'update temp_mon_schema.devices set devices_screen=$1, devices_screen_order=$2 where devices_id=$3;');
+	$result = pg_execute($db_conn, "update_query", array($screen, $order, $id));
+	pg_close($db_conn);
 }
 
 function DbGetHumCsvData() {
