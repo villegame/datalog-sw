@@ -213,7 +213,7 @@ for($i=0; $i<count($db_temp_device_data); $i++) {
 
 if(count($devices_only_in_db) > 0) {
 
-	echo "<b>Following devices were found in database that are not connected to system physically:</b>";
+	echo "<b><font color='red'>Following devices were found in database that are not connected to system physically:</font></b>";
 	echo "<table>";
 	echo "<tr><td><b>Name</b></td><td><b>Status</b></td><td><b>Action</b></td></tr>";
 
