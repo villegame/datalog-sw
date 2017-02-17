@@ -169,6 +169,10 @@ def read_from_db():
       devices[i][4] = data[0]
     i = i+1
 
+  # Close cursor and connection
+  cur.close()
+  conn.close()
+
 
   # Generate screen texts per screen [line1, line2]
   screen_texts = []
