@@ -136,7 +136,7 @@ def read_from_db():
 
 #  print "FROM DB"
   
-  # Read measure data from database
+  # Connect to database
   conn = psycopg2.connect("dbname='temp_mon' user='temp_mon_user' host='localhost' password='password'")
   cur = conn.cursor()
 
