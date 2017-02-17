@@ -21,6 +21,7 @@ Datalogger software related to a datalogger project [described here] (https://vi
   * dht.c  
   * reader.py  
   * poweroff.py
+  * lcd.py
 
 * Other
 
@@ -58,6 +59,9 @@ Python script to read sensor data and update it to database.
 
 ### poweroff.py
 Simple script for lighting up a led to indicate system is online and to listen a button for shutdown command.
+
+### lcd.py
+LCD display handling script. Based on example here: http://www.raspberrypi-spy.co.uk/2012/08/16x2-lcd-module-control-with-backlight-switch/
 
 ### psql.sql
 Contains sql scripts for creting a schema and a few tables.
