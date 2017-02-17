@@ -137,7 +137,7 @@ def read_from_db():
 #  print "FROM DB"
   
   # Read measure data from database
-  conn = psycopg2.connect("dbname='temp_mon' user='temp_mon_user' host='localhost' password='temp_mon_user'")
+  conn = psycopg2.connect("dbname='temp_mon' user='temp_mon_user' host='localhost' password='password'")
   cur = conn.cursor()
 
   # Get latest time data was logged in
