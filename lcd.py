@@ -73,7 +73,7 @@ def read_from_db():
       screen_texts.append([line_1, line_2])
     screen = screen + 1
 
-  # Set triggerlimit to last screen cycle time plus one second
+  # Set triggerlimit to last screen cycle time plus screen_cycle_extra_time to avoid mysterious "double triggering"
   global triggerlimit
   triggerlimit = len(screen_texts) * screen_cycle_time + screen_cycle_extra_time
 
