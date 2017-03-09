@@ -1,8 +1,10 @@
 #!/usr/bin/python
-
-import psycopg2
 import time
 import os
+
+from dblib import Database
+
+database = Database()
 
 # Translate BCM.Gpio nubmer to wiringPi pin
 # Pin translation: http://wiringpi.com/pins/
@@ -38,26 +40,8 @@ owDevices=[]
 dhtDevices=[]
 
 # Get device data from database
-try:
-	# Connection
-	conn = psycopg2.connect("dbname='temp_mon' user='temp_mon_user' host='localhost' password='password'")
-	# Cursor for performing operations
-	cur = conn.cursor()
-
-	# Run query for 1-w devices
-	cur.execute("SELECT devices_id, devices_source, devices_type, devices_sensor FROM temp_mon_schema.devices where devices_enabled=1 and devices_sensor=1;");
-	for value in cur:
-		owDevices.append(value)
-
-	# Run query for dht-devices
-	cur.execute("SELECT devices_id, devices_source, devices_type, devices_sensor FROM temp_mon_schema.devices where devices_enabled=1 and devices_sensor=2 order by devices_source;");
-	for value in cur:
-		dhtDevices.append(value)
-
-	cur.close()
-	conn.close()
-except:
-	print "Cannot get device data from database"
+owDevices = database.get_devices_by_sensor(1)
+dhtDevices = database.get_devices_by_sensor(2)
 
 # Get values from devices
 
@@ -122,33 +106,15 @@ for command in dhtCommands:
 		command[3] = False
 
 # Write results into database
-try:
-	# Timestamp
-	timestamp = int(time.time())
+timestamp = int(time.time())
 
-        # Connection
-        conn = psycopg2.connect("dbname='temp_mon' user='temp_mon_user' host='localhost' password='password'")
-        # Cursor for performing operations
-        cur = conn.cursor()
 
-        for command in dhtCommands:
-		if command[2] == True:
-			query = "insert into temp_mon_schema.values (devices_id, values_value, values_time) values({0}, {1}, {2});".format(command[6], command[4], timestamp)
-			cur.execute(query)
-		if command[3] == True:
-			query = "insert into temp_mon_schema.values (devices_id, values_value, values_time) values({0}, {1}, {2});".format(command[7], command[5], timestamp)
-			cur.execute(query)
+for command in dhtCommands:
+	if command[2] == True:
+		database.insert_device_value(command[6], command[4], timestamp)
+	if command[3] == True:
+		database.insert_device_value(command[7], command[5], timestamp)
 
-	for command in owCommands:
-		query = "insert into temp_mon_schema.values (devices_id, values_value, values_time) values({0}, {1}, {2});".format(command[0], command[2], timestamp)
-		cur.execute(query)
-
-	# Commit changes
-	conn.commit()
-
-	# Close cursor and connection
-        cur.close()
-        conn.close()
-except:
-        print "Cannot insert data to database"
+for command in owCommands:
+	database.insert_device_value(command[0], command[2], timestamp)
 
