@@ -2,6 +2,12 @@
 
 Datalogger software related to a datalogger project [described here] (https://villegame.wordpress.com/projects/data-monitoring/portable-temperature-and-humidity-measuring-application-project/).
 
+##Notice
+
+This is just a storage for files. Needed files are referred to from my blog.
+
+##Files
+
 * /var/www/
 
   * db.php  
@@ -22,6 +28,9 @@ Datalogger software related to a datalogger project [described here] (https://vi
   * reader.py  
   * poweroff.py
   * lcd.py
+  * read.sh
+  * lcdlib.py
+  * dblib.py
 
 * Other
 
@@ -61,7 +70,16 @@ Python script to read sensor data and update it to database.
 Simple script for lighting up a led to indicate system is online and to listen a button for shutdown command.
 
 ### lcd.py
-LCD display handling script. Based on example here: http://www.raspberrypi-spy.co.uk/2012/08/16x2-lcd-module-control-with-backlight-switch/
+LCD display handling script. Uses LCD class from lcdlib.py and Database class from dblib.py.
+
+### read.sh
+Basic reader, can be replaced with reader.py
+
+### lcdlib.py
+LCD-display handling class. Based on example here: http://www.raspberrypi-spy.co.uk/2012/08/16x2-lcd-module-control-with-backlight-switch/
+
+### dblib.py
+Database handling class. To be used from reader.py and lcd.py.
 
 ### psql.sql
 Contains sql scripts for creting a schema and a few tables.
