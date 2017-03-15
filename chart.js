@@ -1,9 +1,4 @@
-//
-// Interactive multi-line graph
-// Based on example here: http://www.d3noob.org/2014/07/d3js-multi-line-graph-with-automatic.html
-//
-
-var LineChart = function (type) {
+var LineChart = function (type, min, max) {
 
 	// Set the dimensions of the canvas / graph
 	var margin = {top: 30, right: 20, bottom: 70, left: 50},
@@ -12,6 +7,9 @@ var LineChart = function (type) {
 
 	// Parse the date / time
 	var parseDate = d3.time.format("%Y%m%d%H%M%S").parse;
+//	var parseDate = d3.time.format("%b %Y").parse;
+//	var parseDate = d3.time.format("%H:%M:%s").parse;
+//	var parseDate = d3.time.format("%L").parse;
 
 	// Set the ranges
 	var x = d3.time.scale().range([0, width]);
@@ -23,6 +21,9 @@ var LineChart = function (type) {
 
 	var yAxis = d3.svg.axis().scale(y)
 	    .orient("left").ticks(5).tickSize(-width,0,0);
+
+	//var yAxis2 = d3.svg.axis().scale(y)
+	//    .orient("right").ticks(5);
 
 	// Define the line
 	var priceline = d3.svg.line()
@@ -40,18 +41,26 @@ var LineChart = function (type) {
 
 	var dataSource = "";
 
-	if(type == "temperature") dataSource = "gettempdata.php";
-	else if(type == "humidity") dataSource = "gethumdata.php";
+	if(type == "temperature") dataSource = "../gettempdata.php";
+	else if(type == "humidity") dataSource = "../gethumdata.php";
 
 	// Get the data
 	d3.csv(dataSource, function(error, data) {
 	    data.forEach(function(d) {
+	//		d.time = new Date(+d.time);
+	//              d.time = parseDate(new Date(time));
+	//		d.time = +d.time;
 		        d.time = parseDate(d.time);
 		        d.value = +d.value;
 	    });
 	    // Scale the range of the data
+	    if(min == null) min = d3.min(data, function(d) {return d.value;});
+	    if(max == null) max = d3.max(data, function(d) {return d.value;});
+
 	    x.domain(d3.extent(data, function(d) { return d.time; }));
-	    y.domain([d3.min(data, function(d) {return d.value; }), d3.max(data, function(d) { return d.value; })]);
+//	    y.domain([d3.min(data, function(d) {return d.value; }), d3.max(data, function(d) { return d.value; })]);
+//	    y.domain([d3.min(data, function(d) {return d.value; }), 20]); // raja-arvot
+	    y.domain([min, max]); // raja-arvot
 
 	    // Nest the entries by device
 	    var dataNest = d3.nest()
@@ -69,6 +78,7 @@ var LineChart = function (type) {
 		    .attr("class", "line")
 		    .style("stroke", function() { // Add the colours dynamically
 		        return d.color = color(d.key); })
+//		    .style("stroke-dasharray", ("3, 3"))	// dotted line, remove to solid line
 		    .style("stroke-dasharray", (function() { var retval = "1, 0"; if(type=="humidity") retval="8, 3"; return retval; }))	// dotted line, remove to solid line
 		    .attr("id", 'tag'+d.key.replace(/\s+/g, '')) // assign ID
 		    .attr("d", priceline(d.values));
