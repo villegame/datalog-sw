@@ -15,7 +15,7 @@ This is just a storage for files. Needed files are referred to from my blog.
 * /var/www/html/
 
   * chart.js  
-  * charts.html  
+  * charts.php  
   * gethumdata.php  
   * gettempdata.php  
   * index.html
@@ -42,7 +42,7 @@ Database-related PHP functions.
 ### chart.js
 D3 chart based on example here: http://www.d3noob.org/2014/07/d3js-multi-line-graph-with-automatic.html.
 
-### charts.html
+### charts.php
 Page containing charts.
 
 ### gethumdata.php
