@@ -2,11 +2,11 @@
 
 Datalogger software related to a datalogger project [described here] (https://villegame.wordpress.com/projects/data-monitoring/portable-temperature-and-humidity-measuring-application-project/).
 
-##Notice
+## Notice
 
 This is just a storage for files. Needed files are referred to from my blog.
 
-##Files
+## Files
 
 * /var/www/
 
