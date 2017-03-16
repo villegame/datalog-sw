@@ -1,6 +1,6 @@
 # datalog-sw
 
-Datalogger software related to a datalogger project [described here] (https://villegame.wordpress.com/projects/data-monitoring/portable-temperature-and-humidity-measuring-application-project/). 
+Datalogger software related to a datalogger project [described here] (https://villegame.wordpress.com/projects/data-monitoring/portable-temperature-and-humidity-measuring-application-project/) . 
 This is just a storage for files that might be required. Files and their use is documented on my blog.
 
 ## Files
