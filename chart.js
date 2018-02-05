@@ -7,9 +7,6 @@ var LineChart = function (type, min, max) {
 
 	// Parse the date / time
 	var parseDate = d3.time.format("%Y%m%d%H%M%S").parse;
-//	var parseDate = d3.time.format("%b %Y").parse;
-//	var parseDate = d3.time.format("%H:%M:%s").parse;
-//	var parseDate = d3.time.format("%L").parse;
 
 	// Set the ranges
 	var x = d3.time.scale().range([0, width]);
@@ -21,9 +18,6 @@ var LineChart = function (type, min, max) {
 
 	var yAxis = d3.svg.axis().scale(y)
 	    .orient("left").ticks(5).tickSize(-width,0,0);
-
-	//var yAxis2 = d3.svg.axis().scale(y)
-	//    .orient("right").ticks(5);
 
 	// Define the line
 	var priceline = d3.svg.line()
@@ -47,20 +41,15 @@ var LineChart = function (type, min, max) {
 	// Get the data
 	d3.csv(dataSource, function(error, data) {
 	    data.forEach(function(d) {
-	//		d.time = new Date(+d.time);
-	//              d.time = parseDate(new Date(time));
-	//		d.time = +d.time;
-		        d.time = parseDate(d.time);
-		        d.value = +d.value;
+	        d.time = parseDate(d.time);
+	        d.value = +d.value;
 	    });
 	    // Scale the range of the data
 	    if(min == null) min = d3.min(data, function(d) {return d.value;});
 	    if(max == null) max = d3.max(data, function(d) {return d.value;});
 
 	    x.domain(d3.extent(data, function(d) { return d.time; }));
-//	    y.domain([d3.min(data, function(d) {return d.value; }), d3.max(data, function(d) { return d.value; })]);
-//	    y.domain([d3.min(data, function(d) {return d.value; }), 20]); // raja-arvot
-	    y.domain([min, max]); // raja-arvot
+	    y.domain([min, max]);
 
 	    // Nest the entries by device
 	    var dataNest = d3.nest()
