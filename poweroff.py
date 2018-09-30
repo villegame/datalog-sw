@@ -6,20 +6,21 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
 # 27 for led
-GPIO.setup(27,GPIO.OUT)
-
+led = 27
 # 22 for button
-GPIO.setup(22,GPIO.IN, pull_up_down=GPIO.PUD_UP)
+button = 22
 
+GPIO.setup(button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(led, GPIO.OUT)
 # turn led on
-GPIO.output(27,GPIO.HIGH)
+GPIO.output(led, GPIO.HIGH)
 
 # define function
 def Shutdown(channel):
 	os.system("sudo shutdown -h now")
 
 # add event on button down
-GPIO.add_event_detect(22, GPIO.FALLING, callback = Shutdown, bouncetime = 2000)
+GPIO.add_event_detect(button, GPIO.FALLING, callback = Shutdown, bouncetime = 2000)
 
 while 1:
 	time.sleep(1)
